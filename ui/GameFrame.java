@@ -26,10 +26,11 @@ public class GameFrame extends JPanel {
      * @param difficulty "初級", "中級", "上級"
      */
     public void setDifficultyBackground(String difficulty) {
+        // 変更: リソースは images/ 配下にまとめる（TypingGameUI に合わせる）
         String imagePath = switch (difficulty) {
-            case "初級" -> "/image.gameForBeginner.jpg";
-            case "中級" -> "/image.gameForMidium.jpg";
-            case "上級" -> "/image.gameForPro.jpg";
+            case "初級" -> "/images/gameForBeginner.jpg";
+            case "中級" -> "/images/gameForMidium.jpg";
+            case "上級" -> "/images/gameForPro.jpg";
             default    -> "";
         };
 
@@ -38,7 +39,20 @@ public class GameFrame extends JPanel {
             this.backgroundImage = new ImageIcon(resource).getImage();
             repaint(); // 画像読み込み後に再描画をリクエスト
         } else {
-            System.err.println("背景画像が見つかりません: " + imagePath);
+            // フォールバック: ルート直下に置かれている旧パスも試す
+            String fallbackRoot = switch (difficulty) {
+                case "初級" -> "/image.gameForBeginner.jpg";
+                case "中級" -> "/image.gameForMidium.jpg";
+                case "上級" -> "/image.gameForPro.jpg";
+                default    -> "";
+            };
+            var fallback = getClass().getResource(fallbackRoot);
+            if (fallback != null) {
+                this.backgroundImage = new ImageIcon(fallback).getImage();
+                repaint();
+            } else {
+                System.err.println("背景画像が見つかりません: " + imagePath + " (fallback=" + fallbackRoot + ")");
+            }
         }
     }
 
