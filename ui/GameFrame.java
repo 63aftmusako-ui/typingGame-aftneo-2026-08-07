@@ -16,8 +16,8 @@ public class GameFrame extends JPanel {
      * コンストラクタ
      */
     public GameFrame() {
-        // 背景画像や上に載るUI要素が透過して見えるように設定
-        setOpaque(false);
+        // 変更: 背景を自分で描画するのでこのパネルは不透明にする
+        setOpaque(true);
         setLayout(new BorderLayout());
     }
 
